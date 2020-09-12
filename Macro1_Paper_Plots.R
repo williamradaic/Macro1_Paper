@@ -182,6 +182,98 @@ unemp.plot.2y <- plot_ly(unemp.df, x = ~(2001:2017), y =~Unemployment, type = "s
 unemp.plot <- plot_ly(unemp.df, x = ~(2001:2017), y =~Unemployment, type = "scatter", mode = "line", name = "Taxa de desemprego (%)") %>% add_trace(y = ~GDP, name = "Variação do PIB (%)") %>% layout(xaxis = list(title = "Tempo", dtick = 1, tickmode = "linear"), font = list(family = "Helvetica", size = 20), yaxis = list(title = "%")) 
 
 
+# Mineral rents ($GDP * GDP)
+
+mineral.df = data.frame(wb.clean.num$NY.GDP.MKTP.CD, wb.clean.num$NY.GDP.MKTP.KD.ZG, wb.clean.num$NY.GDP.MINR.RT.ZS, wb.clean.num$NY.GDP.MKTP.CD*wb.clean.num$NY.GDP.MINR.RT.ZS/100)
+
+names(mineral.df) = c("GDP.CD", "GDP.p", "Mining.p", "Mining.CD")
+
+ay2 <- list(
+  tickfont = list(color = "red"),
+  overlaying = "y",
+  side = "right",
+  title = "Variação do PIB (%)"
+)
+
+
+mineral.plot <- plot_ly(mineral.df, x = ~(2001:2017), y =~Mining.CD, type = "scatter", mode = "line", name = "Mineração") %>% add_trace(y = ~GDP.p, yaxis = "y2", name = "Variação do PIB") %>% layout(xaxis = list(title = "Tempo", dtick = 1, tickmode = "linear"), font = list(family = "Helvetica", size = 20), yaxis = list(title = "Mineração (USD 2017)"), yaxis2 = ay2) # Grãfico com 2 eixos y. polemico kk
+z
+# Government debt
+
+library(readxl)
+sarb_na_df <- read_excel("Kbp6NA-June2020.xlsx", 
+                         sheet = "J1")
+
+sarb_pf_df <- read_excel("Kbp4PF-June2020.xlsx", 
+                         sheet = "J1")
+
+sarb_bp_df <- read_excel("Kbp5BoP-June2020.xlsx", 
+                         sheet = "J1")
+
+sarb_mb_df <- read_excel("Kbp1MB-June2020.xlsx", 
+                         sheet = "J1")
+
+sarb_mb2_df <- read_excel("Kbp1MB-June2020.xlsx", 
+                         sheet = "J1")
+
+sarb.pf.clean = sarb_pf_df[55:71,]
+
+sarb.na.clean = sarb_na_df[56:72,]
+
+sarb.bp.clean = sarb_bp_df[56:72,]
+
+sarb.mb.clean = sarb_mb_df[42:58,]
+
+gov.debt.plot <- plot_ly(sarb.pf.clean, x = ~(2001:2017), y=~KBP4116J, type = "scatter", mode ="line", name = "Dívida Bruta/PIB") %>% add_trace(y = ~mineral.df$GDP.p, yaxis = "y2", name = "Variação do PIB") %>% layout(xaxis = list(title = "Tempo", dtick = 1, tickmode = "linear"), font = list(family = "Helvetica", size = 20), yaxis = list(title = "Dívida Bruta/PIB (%)"), yaxis2 = ay2)
+
+# Currency -- USD, BRL, EUR, GBP, Yuan, RU 
+
+currency.df = data.frame((1/100)*data.frame(sarb.bp.clean$KBP5306J, sarb.bp.clean$KBP5307J, sarb.bp.clean$KBP5319J, sarb.bp.clean$KBP5315J, sarb.bp.clean$KBP5323J, sarb.bp.clean$KBP5325J, sarb.bp.clean$KBP5336J, sarb.bp.clean$KBP5338J, sarb.bp.clean$KBP5339J))
+
+names(currency.df) = c("BRL", "RBL", "YEN", "EUR", "YUAN", "INR", "CHF", "GBP", "USD")
+
+currency.plot <- plot_ly(currency.df, x =~(2001:2017), y=~USD, type = "scatter", mode = "line", name = "USD") %>% add_trace(y=~GBP, name = "GBP") %>% add_trace(y=~EUR, name = "EUR") %>% add_trace(y=~YUAN, name = "CNY") %>% add_trace(y=~BRL, name = "BRL") %>% add_trace(y=~INR, name = "INR") %>% layout(xaxis = list(title = "Tempo", dtick = 1, tickmode = "linear"), font = list(family = "Helvetica", size = 20), yaxis = list(title = "Câmbio (ZAR)"))
+
+# Monetary base.
+
+mb.df = data.frame(sarb.mb.clean$KBP1371J, sarb.mb.clean$KBP1373J, sarb.mb.clean$KBP1374J)
+
+names(mb.df) = c("M1", "M2", "M3")
+
+mb.plot <- plot_ly(mb.df, x=~(2001:2017), y = ~M3, type = "bar", name = "M3") %>% add_trace(y = ~M2, name = "M2") %>% add_trace(y = ~M1, name = "M1") %>% layout(xaxis = list(title = "Tempo", dtick = 1, tickmode = "linear"), font = list(family = "Helvetica", size = 20), yaxis = list(title = "Unidades monetárias"), barmode = "overlay", legend = list(title = list(text = "<b> Agregado <b>")))
+
+
+# Gini x GDP plot.
+
+gini.df = data.frame(wb.clean.num$SI.POV.GINI, wb.clean.num$NY.GDP.MKTP.KD.ZG)
+
+names(gini.df) = c("Gini", "GDP.p")
+
+gini.df = gini.df[5:14,]
+
+gini.plot <- plot_ly(gini.df, x=~(2005:2014), y = ~Gini, type = "scatter", mode = "line", name = "Gini") %>% add_trace(y = ~GDP.p, name = "Variação do PIB", yaxis = "y2") %>% layout(xaxis = list(title = "Tempo", dtick = 1, tickmode = "linear"), font = list(family = "Helvetica", size = 20), yaxis = list(title = "Índice de Gini"), yaxis2 = ay2)
+
+# Savings x GDP plot. 
+
+savings.df = data.frame(wb.clean.num$NY.GNS.ICTR.ZS, wb.clean.num$NY.GDP.MKTP.KD.ZG)
+
+names(savings.df) = c("Savings.p", "GDP.p")
+
+savings.plot = plot_ly(savings.df, x=~(2001:2017), y = ~Savings.p, type = "scatter", mode = "line", name = "Poupança") %>% add_trace(y = ~GDP.p, name = "Variação do PIB", yaxis = "y2") %>% layout(xaxis = list(title = "Tempo", dtick = 1, tickmode = "linear"), font = list(family = "Helvetica", size = 20), yaxis = list(title = "Poupança (% PIB)"), yaxis2 = ay2)
+
+# GDP cross-country plot.
+
+gdp_cc_df <- read_excel("API_NY.GDP.MKTP.KD.ZG_DS2_en_excel_v2_1345098.xls", 
+                        sheet = "Data")
+
+gdp_cc_df_t = transpose(gdp_cc_df)
+
+rownames(gdp_cc_df_t) = colnames(gdp_cc_df)
+colnames(gdp_cc_df_t) = gdp_cc_df_t[1,]
+
+gdp.cc.clean = gdp_cc_df_t[43:59,]
+
+View(gdp.cc.clean)
 
 
 
@@ -194,4 +286,9 @@ unemp.plot <- plot_ly(unemp.df, x = ~(2001:2017), y =~Unemployment, type = "scat
 
 
 
-                   
+
+
+
+
+
+
