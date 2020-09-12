@@ -138,7 +138,7 @@ credit_gdp.df <- data.frame(wb.clean.num$FS.AST.DOMS.GD.ZS)
 
 names(credit_gdp.df) = "Credit"
 
-credit_gdp_world.df <- read_excel("Dados WB/API_FS.AST.DOMS.GD.ZS_DS2_en_excel_v2_1353420.xls", 
+credit_gdp_world.df <- read_excel("API_FS.AST.DOMS.GD.ZS_DS2_en_excel_v2_1353420.xls", 
                                   skip = 2)
 
 credit_gdp_world.df_t = transpose(credit_gdp_world.df)
@@ -161,7 +161,7 @@ wb.cred.num = data.frame(wb.cred.num)
 rownames(wb.cred.num) = rownames(wb.cred.clean)
 colnames(wb.cred.num) = colnames(wb.cred.clean)
 
-credit_gdp.plot <- plot_ly(wb.cred.num, x = ~(2001:2017), y = ~`South Africa`, type = "scatter", mode = "line", name = "África do Sul") %>% add_segments(y = 100, yend = 100, x = 2007, xend = 2017, showlegend = FALSE, line = list(color = 'rgb(0, 0, 0)', width = 2, dash = 'dash')) %>% add_trace(y = ~`Argentina`, name = "Argentina") %>% add_trace(y = ~`United States`, name = "Estados Unidos")  %>% add_trace(y = ~`Chile`, name = "Chile") %>% add_trace(y = ~`Mexico`, name = "México") %>% layout(xaxis = list(title = "Tempo", dtick = 1, tickmode = "linear"), font = list(family = "Helvetica", size = 20), yaxis = list(title = "Crédito fornecido pelo setor financeiro (% PIB)"), barmode = "stack", legend = list(title = list(text = "<b> País <b>"))) 
+credit_gdp.plot <- plot_ly(wb.cred.num, x = ~(2001:2017), y = ~`South Africa`, type = "scatter", mode = "line", name = "África do Sul") %>% add_segments(y = 100, yend = 100, x = 2001, xend = 2017, showlegend = FALSE, line = list(color = 'rgb(0, 0, 0)', width = 2, dash = 'dash')) %>% add_trace(y = ~`Argentina`, name = "Argentina") %>% add_trace(y = ~`United States`, name = "Estados Unidos")  %>% add_trace(y = ~`Chile`, name = "Chile") %>% add_trace(y = ~`Mexico`, name = "México") %>% layout(xaxis = list(title = "Tempo", dtick = 1, tickmode = "linear"), font = list(family = "Helvetica", size = 20), yaxis = list(title = "Crédito fornecido pelo setor financeiro (% PIB)"), barmode = "stack", legend = list(title = list(text = "<b> País <b>"))) 
 
 
 # unemployment x gdp plot. -- ILO Estimate
