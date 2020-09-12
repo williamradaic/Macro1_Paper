@@ -161,10 +161,25 @@ wb.cred.num = data.frame(wb.cred.num)
 rownames(wb.cred.num) = rownames(wb.cred.clean)
 colnames(wb.cred.num) = colnames(wb.cred.clean)
 
-credit_gdp.plot <- plot_ly(wb.cred.num, x = ~(2007:2017), y = ~`South Africa`, type = "scatter", mode = "line", name = "África do Sul") %>% add_segments(y = 100, yend = 100, x = 2007, xend = 2017, showlegend = FALSE, line = list(color = 'rgb(0, 0, 0)', width = 4, dash = 'dash')) %>% add_trace(y = ~`Argentina`, name = "Argentina") %>% add_trace(y = ~`United States`, name = "Estados Unidos")  %>% add_trace(y = ~`Chile`, name = "Chile") %>% add_trace(y = ~`Mexico`, name = "México") %>% layout(xaxis = list(title = "Tempo", dtick = 1, tickmode = "linear"), font = list(family = "Helvetica", size = 20), yaxis = list(title = "Crédito fornecido pelo setor financeiro (% PIB)"), barmode = "stack", legend = list(title = list(text = "<b> País <b>"))) 
+credit_gdp.plot <- plot_ly(wb.cred.num, x = ~(2007:2017), y = ~`South Africa`, type = "scatter", mode = "line", name = "África do Sul") %>% add_segments(y = 100, yend = 100, x = 2007, xend = 2017, showlegend = FALSE, line = list(color = 'rgb(0, 0, 0)', width = 2, dash = 'dash')) %>% add_trace(y = ~`Argentina`, name = "Argentina") %>% add_trace(y = ~`United States`, name = "Estados Unidos")  %>% add_trace(y = ~`Chile`, name = "Chile") %>% add_trace(y = ~`Mexico`, name = "México") %>% layout(xaxis = list(title = "Tempo", dtick = 1, tickmode = "linear"), font = list(family = "Helvetica", size = 20), yaxis = list(title = "Crédito fornecido pelo setor financeiro (% PIB)"), barmode = "stack", legend = list(title = list(text = "<b> País <b>"))) 
 
 
+# unemployment x gdp plot. -- ILO Estimate
 
+unemp.df = data.frame(wb.clean.num$NY.GDP.MKTP.KD.ZG, wb.clean.num$SL.UEM.TOTL.ZS)
+
+names(unemp.df) = c("GDP", "Unemployment")
+
+ay <- list(
+  tickfont = list(color = "red"),
+  overlaying = "y",
+  side = "right",
+  title = "Variação do PIB (%)"
+)
+
+unemp.plot.2y <- plot_ly(unemp.df, x = ~(2007:2017), y =~Unemployment, type = "scatter", mode = "line") %>% add_trace(y = ~GDP, yaxis = "y2") %>% layout(xaxis = list(title = "Tempo", dtick = 1, tickmode = "linear"), font = list(family = "Helvetica", size = 20), yaxis = list(title = "Taxa de desemprego (%)"), yaxis2 = ay) # Grãfico com 2 eixos y. polemico kk
+
+unemp.plot <- plot_ly(unemp.df, x = ~(2007:2017), y =~Unemployment, type = "scatter", mode = "line", name = "Taxa de desemprego (%)") %>% add_trace(y = ~GDP, name = "Variação do PIB (%)") %>% layout(xaxis = list(title = "Tempo", dtick = 1, tickmode = "linear"), font = list(family = "Helvetica", size = 20), yaxis = list(title = "%")) 
 
 
 
