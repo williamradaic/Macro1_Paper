@@ -94,7 +94,14 @@ names(gdp_demand.df) <- c("GDP","C", "I", "G", "X", "M")
 
 gdp_demand.plot <- plot_ly(gdp_demand.df, x = ~(2007:2017), y = ~C, type = "bar", name = "Consumo")
 
-gdp_demand.plot %>% add_trace(y = ~I, name = "Investimento") %>% add_trace(y = ~G, name = "Gastos do Governo") %>% add_trace(y = ~(X-M), name = "Exportações Líquidas") %>% layout(xaxis = list(title = "Tempo", dtick = 1, tickmode = "linear"), font = list(family = "Helvetica", size = 20), yaxis = list(title = "USD (Valores de 2017)"), barmode = "stack") %>% add_trace(y = ~wb.clean.num$NY.GDP.MKTP.CD, type = "scatter", mode = "line", name = "PIB")
+gdp_demand.plot <- gdp_demand.plot  %>% add_trace(y = ~I, name = "Investimento") %>% add_trace(y = ~G, name = "Gastos do Governo") %>% add_trace(y = ~(X-M), name = "Exportações Líquidas")  %>% add_trace(y = ~wb.clean.num$NY.GDP.MKTP.CD, type = "scatter", mode = "line", name = "PIB") %>% layout(xaxis = list(title = "Tempo", dtick = 1, tickmode = "linear"), font = list(family = "Helvetica", size = 20), yaxis = list(title = "USD (Valores de 2017)"), barmode = "stack", legend = list(title = list(text = "<b> Variável <b>")))
+
+# Exports x Imports plot
+
+exp_imp.plot <- plot_ly(gdp_demand.df, x = ~(2007:2017), y = ~X, type = "bar", name = "Exportações") %>% add_trace(y = ~(-M), name = "Importações") %>% layout(xaxis = list(title = "Tempo", dtick = 1, tickmode = "linear"), font = list(family = "Helvetica", size = 20), yaxis = list(title = "USD (Valores de 2017)"), barmode = "overlay", legend = list(title = list(text = "<b> Variável <b>")))
+
+
+
 
 
 
