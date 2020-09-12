@@ -261,6 +261,8 @@ names(savings.df) = c("Savings.p", "GDP.p")
 
 savings.plot = plot_ly(savings.df, x=~(2001:2017), y = ~Savings.p, type = "scatter", mode = "line", name = "Poupança") %>% add_trace(y = ~GDP.p, name = "Variação do PIB", yaxis = "y2") %>% layout(xaxis = list(title = "Tempo", dtick = 1, tickmode = "linear"), font = list(family = "Helvetica", size = 20), yaxis = list(title = "Poupança (% PIB)"), yaxis2 = ay2)
 
+
+
 # GDP cross-country plot.
 
 gdp_cc_df <- read_excel("API_NY.GDP.MKTP.KD.ZG_DS2_en_excel_v2_1345098.xls", 
@@ -271,17 +273,50 @@ gdp_cc_df_t = transpose(gdp_cc_df)
 rownames(gdp_cc_df_t) = colnames(gdp_cc_df)
 colnames(gdp_cc_df_t) = gdp_cc_df_t[1,]
 
-gdp.cc.clean = gdp_cc_df_t[43:59,]
+gdp.cc.clean = gdp_cc_df_t[51,]
 
-View(gdp.cc.clean)
+gdp.cc.clean_t = transpose(gdp.cc.clean)
+
+rownames(gdp.cc.clean_t) = colnames(gdp.cc.clean)
+colnames(gdp.cc.clean_t) = 2009
+
+gdp.cc.clean_t$`2009` = as.numeric(gdp.cc.clean_t$`2009`)
+
+gdp.cc.clean_t$country = rownames(gdp.cc.clean_t)
+
+
+View(gdp.cc.clean_t)
+
+
+gdp.cc.df = rbind(gdp.cc.clean_t[which(gdp.cc.clean_t$country == "World"),],
+                       gdp.cc.clean_t[which(gdp.cc.clean_t$country == "South Africa"),],
+                       gdp.cc.clean_t[which(gdp.cc.clean_t$country == "United States"),],
+                       gdp.cc.clean_t[which(gdp.cc.clean_t$country == "Brazil"),],
+                       gdp.cc.clean_t[which(gdp.cc.clean_t$country == "India"),],
+                       gdp.cc.clean_t[which(gdp.cc.clean_t$country == "Russian Federation"),],
+                       gdp.cc.clean_t[which(gdp.cc.clean_t$country == "China"),],
+                       gdp.cc.clean_t[which(gdp.cc.clean_t$country == "Germany"),],
+                       gdp.cc.clean_t[which(gdp.cc.clean_t$country == "Spain"),],
+                       gdp.cc.clean_t[which(gdp.cc.clean_t$country == "Portugal"),],
+                       gdp.cc.clean_t[which(gdp.cc.clean_t$country == "Greece"),],
+                       gdp.cc.clean_t[which(gdp.cc.clean_t$country == "OECD members"),],
+                       gdp.cc.clean_t[which(gdp.cc.clean_t$country == "United Kingdom"),],
+                       gdp.cc.clean_t[which(gdp.cc.clean_t$country == "Sub-Saharan Africa"),])
 
 
 
+gdp.cc.df.sort = gdp.cc.df[order(gdp.cc.df$`2009`),]
 
+gdp.cc.df.sort = data.frame(gdp.cc.df.sort)
 
+View(gdp.cc.df.sort)
 
+xform <- list(categoryorder = "array",
+              categoryarray = ~X2009)
 
+xfactor = factor(gdp.cc.df.sort$country, levels = gdp.cc.df.sort$country)
 
+gdp.cc.plot <- plot_ly(gdp.cc.df.sort, x = ~xfactor, y = ~X2009, type = "bar", marker = list(color = c('rgb(49,130,189)', 'rgb(49,130,189)','rgb(49,130,189)','rgb(49,130,189)','rgb(49,130,189)','rgb(49,130,189)','rgb(49,130,189)','rgb(49,130,189)','rgb(49,130,189)','rgba(222,45,38,0.8)', 'rgb(49,130,189)', 'rgb(49,130,189)','rgb(49,130,189)', 'rgb(49,130,189)', 'rgb(49,130,189)'))) %>% layout(xaxis = list(title = "Tempo", dtick = 1, tickmode = "linear"), font = list(family = "Helvetica", size = 20), xaxis = xform, yaxis = list(title = "Variação do PIB (2008-2009, %)"), barmode = "group", legend = list(title = list(text = "<b> Variável <b>")))
 
 
 
