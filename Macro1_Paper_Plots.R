@@ -320,10 +320,32 @@ gdp.cc.plot <- plot_ly(gdp.cc.df.sort, x = ~xfactor, y = ~X2009, type = "bar", m
 
 
 
+# MSCI S.Af. x World
+
+library(quantmod)
+library(autoplotly)
+
+eza <- getSymbols("EZA", src = "yahoo", from = "2003-02-07", to = "2017-12-31", auto.assign = F)
+
+urth <- getSymbols("URTH", src = "yahoo", from = "2001-01-01", to = "2017-12-31", auto.assign = F)
+
+sp500 <- getSymbols("^GSPC", src = "yahoo", from = "2003-02-07", to = "2017-12-31", auto.assign = F)
+
+stock.df = data.frame(eza$EZA.Adjusted, sp500$GSPC.Adjusted)
+
+names(stock.df) = c('EZA', 'SP500')
 
 
 
+stock.ggplot <- autoplot(cbind(eza$EZA.Adjusted*20, sp500$GSPC.Adjusted), facets = F) + scale_y_continuous(name = "S&P 500", sec.axis = sec_axis(~./20, name = "EZA")) + theme_few() + xlab("Tempo")
+
+south_africa_msci <- read_excel("south_africa_msci.xls")
+
+south_africa_msci$Date = as.Date(south_africa_msci$Date, origin = '1992-12-31')
+
+msci.df = data.frame(eza_msci, acwi_msci)
 
 
+stock.plot <- plot_ly(msci.df, x = ~(rownames(msci.df)), y = ~eza_msci, type = "scatter", mode = "line", name = "EZA") %>% add_trace(y = ~acwi_msci, name = "ACWI") %>% layout(xaxis = list(title = "Tempo"), font = list(family = "Helvetica", size = 20), yaxis = list(title = "Índice"))
 
 
