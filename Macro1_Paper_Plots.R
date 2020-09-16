@@ -186,6 +186,21 @@ unemp.plot <- plot_ly(unemp.df, x = ~(2001:2017), y =~Unemployment, type = "scat
 
 mineral.df = data.frame(wb.clean.num$NY.GDP.MKTP.CD, wb.clean.num$NY.GDP.MKTP.KD.ZG, wb.clean.num$NY.GDP.MINR.RT.ZS, wb.clean.num$NY.GDP.MKTP.CD*wb.clean.num$NY.GDP.MINR.RT.ZS/100)
 
+mineral_yoy.df = matrix(NA, ncol = 1, nrow = 100)
+
+
+for (i in 2:nrow(mineral.df)) {
+  mineral_yoy.df[i] = 100*((mineral.df$wb.clean.num.NY.GDP.MKTP.CD...wb.clean.num.NY.GDP.MINR.RT.ZS.100[i] - mineral.df$wb.clean.num.NY.GDP.MKTP.CD...wb.clean.num.NY.GDP.MINR.RT.ZS.100[i-1])/(mineral.df$wb.clean.num.NY.GDP.MKTP.CD...wb.clean.num.NY.GDP.MINR.RT.ZS.100[i]))
+}
+
+mineral_yoy.df = data.frame(mineral_yoy.df[2:17,])
+
+names(mineral_yoy.df) = "mining.p"
+
+mineral_yoy.plot <- plot_ly(mineral_yoy.df, x = ~(2002:2017), y =~mining.p, type = "bar", name = "Mineração", marker = list(color = c('rgb(49,130,189)', 'rgb(49,130,189)','rgb(49,130,189)','rgb(49,130,189)','rgb(49,130,189)','rgb(49,130,189)','rgb(49,130,189)', 'rgba(222,45,38,0.8)', 'rgb(49,130,189)','rgb(49,130,189)', 'rgb(49,130,189)', 'rgb(49,130,189)','rgb(49,130,189)', 'rgb(49,130,189)', 'rgb(49,130,189)', 'rgb(49,130,189)'))) %>% layout(xaxis = list(title = "Tempo", dtick = 1, tickmode = "linear"), font = list(family = "Helvetica", size = 20), yaxis = list(title = "Variação da mineração (%)"), yaxis2 = ay2)
+
+# %>% add_trace(y = ~mineral.df$wb.clean.num.NY.GDP.MKTP.KD.ZG[2:17], name = "Variação do PIB", yaxis = "y2")
+
 names(mineral.df) = c("GDP.CD", "GDP.p", "Mining.p", "Mining.CD")
 
 ay2 <- list(
